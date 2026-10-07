@@ -1,0 +1,11 @@
+{% extends 'layout.html'%}
+{% block title%}Login Form{%endblock%}
+{%block h1 %}please Enter your Id and password{%endblock%}
+{%block main%}
+    <form method="post">
+        <p class="errormsg">{{msg}}</p>
+        <input type="text" name="username" id="username" placeholder="username....">
+        <input type="password" name="password" id="password" placeholder="password">
+        <input type="submit" value="Login">
+    </form>
+{%endblock%}

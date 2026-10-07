@@ -1,0 +1,52 @@
+{% extends 'layout.html'%}
+{% block title%}Comments of post{%endblock%}
+{%block h1 %}comments of post {{post._id}}{%endblock%}
+{%block main%}
+    <div class="post">
+        <h2>{{post.title}}</h2>
+        <div class="pic">
+            {%if post.get('image',None)%}
+                <img src="{{ url_for('static', filename='uploads/image/'+post.image) }}" alt="">
+            {%else%}
+            <img src="{{ url_for('static', filename='image/NoPic.jpg') }}" alt="">
+            {%endif%}
+
+        </div>
+        <p>{{post.content}}</p>
+
+    </div>
+    {%if not session.get('is_login',False)%}
+    <form method="post">
+        <p class="errormsg">{{msg}}</p>
+        <input type="text" name="author" id="author" placeholder="ur name...">
+        <textarea name="text" id="text" placeholder="Comment..."></textarea>
+        <input type="submit" value="Save comment">
+    </form>
+    {%endif%}
+{% for com in post.comments %}
+
+    {% if session.get('is_login', False) %}
+
+        <form method="post" action="{{ url_for('change_comment_status', post_id=post._id, comment_index=loop.index0) }}">
+            <h3>{{ com.author }}</h3>
+            <p>{{ com.text }}</p>
+
+            <input type="submit" name="but"
+                   value="{% if com.is_active %}Deactive{% else %}Active{% endif %}">
+
+            <input type="submit" name="but" value="Delete Comment">
+        </form>
+
+    {% else %}
+
+        {% if com.is_active %}
+            <div class="comment">
+                <h3>{{ com.author }}</h3>
+                <p>{{ com.text }}</p>
+            </div>
+        {% endif %}
+
+    {% endif %}
+
+{% endfor %}
+{%endblock%}

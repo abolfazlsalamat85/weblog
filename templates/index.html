@@ -1,0 +1,25 @@
+{% extends 'layout.html'%}
+{% block title%}Home Page{%endblock%}
+{%block h1 %}Welcome to kami's  weblog as {{session.get('user_name','Guest')}}{%endblock%}
+{%block main%}
+    {%for post in posts%}
+    <div class="post">
+        <h2>{{post.title}}</h2>
+        <div class="pic">
+            {%if post.get('image',None)%}
+                <img src="{{ url_for('static', filename='uploads/image/'+post.image) }}" alt="">
+            {%else%}
+            <img src="{{ url_for('static', filename='image/NoPic.jpg') }}" alt="">
+            {%endif%}
+
+        </div>
+        <p>{{post.content}}</p>
+        {%if session.get('is_login',False)%}
+            <form method="post" action="{{ url_for('delete_post', post_id=post._id) }}">
+                <input type="submit" value="Delete Post">
+            </form>
+        {%endif%}
+        <a href="{{ url_for('comments',post_id=post._id ) }}">comments</a>
+    </div>
+    {%endfor%}
+{%endblock%}
